@@ -1,0 +1,481 @@
+﻿@model PMS.DataLayer.AdminHomeModel
+@{
+    ViewData["Title"] = "Admin Page";
+
+    int userCounter = 1;
+    int roleCounter = 1;
+    int statusCounter = 1;
+    int priorityCounter = 1;
+}
+
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-stats-tab" data-bs-toggle="tab" data-bs-target="#nav-stats" type="button" role="tab" aria-controls="nav-stats" aria-selected="true">Statistics</button>
+        <button class="nav-link" id="nav-user-tab" data-bs-toggle="tab" data-bs-target="#nav-user" type="button" role="tab" aria-controls="nav-user" aria-selected="false">Users</button>
+        <button class="nav-link" id="nav-role-tab" data-bs-toggle="tab" data-bs-target="#nav-role" type="button" role="tab" aria-controls="nav-role" aria-selected="false">Roles</button>
+        <button class="nav-link" id="nav-status-tab" data-bs-toggle="tab" data-bs-target="#nav-status" type="button" role="tab" aria-controls="nav-status" aria-selected="false">Statuses</button>
+        <button class="nav-link" id="nav-priority-tab" data-bs-toggle="tab" data-bs-target="#nav-priority" type="button" role="tab" aria-controls="nav-priority" aria-selected="false">Priorities</button>
+        <button class="nav-link" id="nav-userroles-tab" data-bs-toggle="tab" data-bs-target="#nav-userroles" type="button" role="tab" aria-controls="nav-userroles" aria-selected="false">Users' Roles</button>
+    </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-stats" role="tabpanel" aria-labelledby="nav-stats-tab">
+        <h3>General Stats</h3>
+        <p>Here will be the general stats</p>
+
+        <p>Total Users: <span>@Model.Users.Count()</span></p>
+        <p>Total Projects: <span>@ViewBag.Project</span></p>
+        <p>Total Tasks: <span>@ViewBag.Task</span></p>
+        <p>Total Roles: <span>@Model.Roles.Count()</span></p>
+        <p>Total Statuses: <span>@Model.Statuses.Count()</span></p>
+        <p>Total Priorities: <span>@Model.Priorities.Count()</span></p>
+    </div>
+
+    <div class="tab-pane fade" id="nav-user" role="tabpanel" aria-labelledby="nav-user-tab">
+        <div class="col">
+            <div class="row">
+                <h3>All Users</h3>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>User Id</th>
+                            <th>UserName</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                            <!-- Add other user properties as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.Users)
+                        {
+                            <tr>
+                                <td>@userCounter</td>
+                                <td>@user.UserName</td>
+                                <td>@user.Email</td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col">
+                                            @* <button type="submit" class="btn btm-sm btn-success">Profile</button> *@
+                                            <form asp-area="Identity" asp-page="/Account/Manage/Index" method="post">
+                                                <button type="submit" class="btn btm-sm btn-success">Profile</button>
+                                            </form>
+                                            <a asp-action="EditProfile" asp-route-id="@user.Id">Edit</a> |
+
+                                        </div>
+
+                                    </div>
+                                </td>
+                                <!-- Add other user properties as needed -->
+                            </tr>
+                            userCounter++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+           <!-- <div class="row">something will be here</div> -->
+        </div>
+
+    </div>
+
+    <div class="tab-pane fade" id="nav-role" role="tabpanel" aria-labelledby="nav-role-tab">
+        <div class="col">
+            <div class="row">
+                <h3>All Roles</h3>
+                <div class="row">
+                        <!--<form asp-action="Create" method="post">
+                            <div class="form-row align-items-center">
+                                <div class="col-auto">
+                                    <label for="name" class="sr-only">New Role:</label>
+                                    <input name="name" class="form-control" placeholder="New Role" />
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </div>
+                            </div>
+                        </form> -->
+                    <div class="row">
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">Create</button>
+
+                        <form asp-action="Create" method="post">
+                            <div class="modal fade" id="createModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="createModalLabel">Create Role</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Place your form elements inside the <form> tag -->
+                                            @* <form asp-action="Create" method="post"> *@
+                                                <div class="form-group">
+                                                    <label for="name">Role Name:</label>
+                                                    <input name="name" class="form-control" required />
+                                                </div>
+                                            @* </form> *@
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-warning">Create</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Role Id</th>
+                            <th>Role Name</th>
+                            <th>Actions</th>
+                            <!-- Add other role properties as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var role in Model.Roles)
+                        {
+                            <tr>
+                                <td>@roleCounter</td>
+                                <td>@role.Name</td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col">
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal-@roleCounter">Edit</button>
+                                            <!-- Edit Modal -->
+                                            <form asp-action="Edit" asp-route-id="@role.Id" name="Id" method="post">
+                                                <div class="modal fade" id="editModal-@roleCounter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editModalLabel-@roleCounter" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="editModalLabel-@roleCounter">Edit Role</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <input name="name" class="form-control" value="@role.Name" required />
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btm-sm btn-warning">Edit</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col">
+                                            <form asp-action="Delete" asp-route-name="@role.Name" name="name" method="post">
+                                                <button type="submit" class="btn btm-sm btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
+                                <!-- Add other role properties as needed -->
+                            </tr>
+                            roleCounter++;
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="nav-status" role="tabpanel" aria-labelledby="nav-status-tab">
+        <div class="col">
+            <div class="row">
+                <h3>All Statuses</h3>
+                <div class="row">
+                    <div class="row">
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createStatusModal">Create</button>
+
+                        <form asp-action="CreateStatus" method="post">
+                            <div class="modal fade" id="createStatusModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createStatusModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="createStatusModalLabel">Create Status</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Place your form elements inside the <form> tag -->
+                                            @* <form asp-action="CreateStatus" method="post"> *@
+                                                <div class="form-group">
+                                                    <label for="name">Status Name:</label>
+                                                    <input name="name" class="form-control" required />
+                                                </div>
+                                            @* </form> *@
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-warning">Create</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Status Id</th>
+                            <th>Status Name</th>
+                            <th>Actions</th>
+                            <!-- Add other role properties as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var status in Model.Statuses)
+                        {
+                            <tr>
+                                <td>@statusCounter</td>
+                                @switch (statusCounter)
+                                {
+                                    case 1:
+                                        <td><span class="badge bg-primary">@status.Name</span></td>
+                                        break;
+                                    case 2:
+                                        <td><span class="badge bg-secondary">@status.Name</span></td>
+                                        break;
+                                    case 3:
+                                        <td><span class="badge bg-success">@status.Name</span></td>
+                                        break;
+                                    default:
+                                        <td><span class="badge bg-secondary">@status.Name</span></td>
+                                        break;
+                                }
+                                @* <td><span class="badge bg-danger">@status.Name</span></td> *@
+                                <td>
+                                    <div class="row">
+                                        <div class="col">
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal-@statusCounter">Edit</button>
+                                            <!-- Edit Modal -->
+                                            <form asp-action="EditStatus" asp-route-id="@status.Id" name="Id" method="post">
+                                                <div class="modal fade" id="editModal-@statusCounter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editModalLabel-@statusCounter" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="editModalLabel-@statusCounter">Edit Role</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <input name="name" class="form-control" value="@status.Name" required />
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btm-sm btn-warning">Edit</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col">
+                                            <form asp-action="DeleteStatus" asp-route-id="@status.Id" name="id" method="post">
+                                                <button type="submit" class="btn btm-sm btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
+                                <!-- Add other role properties as needed -->
+                            </tr>
+                            statusCounter++;
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="nav-priority" role="tabpanel" aria-labelledby="nav-priority-tab">
+        <div class="col">
+            <div class="row">
+                <h3>All Priorityes</h3>
+                <div class="row">
+                    <div class="row">
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createpriorityModal">Create</button>
+
+                        <form asp-action="Createpriority" method="post">
+                            <div class="modal fade" id="createpriorityModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createpriorityModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="createpriorityModalLabel">Create Priority</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Place your form elements inside the <form> tag -->
+                                            <form asp-action="CreatePriority" method="post">
+                                                <div class="form-group">
+                                                    <label for="name">Priority Name:</label>
+                                                    <input name="name" class="form-control" required />
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-warning">Create</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Priority Id</th>
+                            <th>Priority Name</th>
+                            <th>Actions</th>
+                            <!-- Add other role properties as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if(Model.Priorities != null)
+                        {
+                            @foreach (var priority in Model.Priorities)
+                            {
+                                <tr>
+                                    <td>@priorityCounter</td>
+                                    <td>@priority.Name</td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col">
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal-@priorityCounter">Edit</button>
+                                                <!-- Edit Modal -->
+                                                <form asp-action="EditPriority" asp-route-id="@priority.Id" name="id" method="post">
+                                                    <div class="modal fade" id="editModal-@priorityCounter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editModalLabel-@priorityCounter" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="editModalLabel-@priorityCounter">Edit Priority</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <input type="hidden" name="id" value="@priority.Id" />
+                                                                    <input name="name" class="form-control" value="@priority.Name" required />
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                    <button type="submit" class="btn btm-sm btn-warning">Edit</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="col">
+                                                <form asp-action="DeletePriority" asp-route-id="@priority.Id" method="post">
+                                                    <input type="hidden" name="id" value="@priority.Id" />
+                                                    <button type="submit" class="btn btm-sm btn-danger">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- Add other role properties as needed -->
+                                </tr>
+                                priorityCounter++;
+                            }
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="nav-userroles" class="tab-pane fade">
+        <div class="col">
+            <div class="row">
+                <h3>User-Role</h3>
+                <div class="row">
+                    <div class="row">
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addRoleToUserModal">Add</button>
+
+                        <form asp-action="addRoleToUser" method="post">
+                            <div class="modal fade" id="addRoleToUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addRoleToUserModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addRoleToUserModalLabel">Add Role</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Place your form elements inside the <form> tag -->
+                                            <div class="form-group">
+                                                   
+                                                    <label asp-for="Roles" class="control-label">Role Name</label>
+                                                    <select name="rolename" class="form-control" asp-items="new SelectList(Model.Roles, nameof(Role.Name), nameof(Role.Name))" required></select>
+                                                    <label asp-for="Users" class="control-label">Employee Name</label>
+                                                    <select name="userid" class="form-control" asp-items="new SelectList(Model.Users, nameof(Employee.Id), nameof(Employee.UserName))" required></select>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-warning">Create</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.UserRoles)
+                        {
+                            <tr>
+                                <td>@user.Employee.UserName</td>
+
+                                <td>
+                                    <ul>
+                                        @if (user.Roles != null && user.Roles.Any())
+                                        {
+                                            @foreach (var role in user.Roles)
+                                            {
+                                                <li class="badge bg-success">
+                                                    <form asp-action="DeleteRoleFromUser" method="post">
+                                                        <input type="hidden" name="id" value="@user.Employee.Id" />
+                                                        <input type="hidden" name="name" value="@role" />
+                                                        <button type="submit" class="btn btm-sm btn-success">@role <span class="badge bg-danger">X</span></button>
+                                                    </form>
+                                                </li>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <li class="badge bg-success">No Roles Assigned</li>
+                                        }
+                                    </ul>
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+</div>

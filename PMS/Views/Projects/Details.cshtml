@@ -1,0 +1,109 @@
+﻿@model PMS.Models.Project
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Project</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Status.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Status.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            Total Tasks:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Tasks.Count)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Employee.UserName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Employee.UserName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<!-- Here ill be all the tasks belongs to a specific Project-->
+<br />
+<br />
+<h3>Tasks</h3>
+<p>
+    <a  asp-controller="Tasks" asp-action="Create" asp-route-projectId="@Model?.Id">Create New</a>
+</p>
+@if(@Model.Tasks !=null){
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Task
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Priority
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model.Tasks)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => task.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => task.Status.Name)
+
+                </td>
+                <td>
+                @Html.DisplayFor(modelItem => task.Priority.Name)
+                        @* @Html.DisplayFor(modelItem => task.Employee.UserName) *@
+                </td>
+                <td>
+                    <a asp-controller="Tasks" asp-action="Edit" asp-route-id="@task.Id">Edit</a> |
+                    <a asp-controller="Tasks" asp-action="Details" asp-route-id="@task.Id">Details</a> |
+                    <a asp-controller="Tasks" asp-action="Delete" asp-route-id="@task.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+}

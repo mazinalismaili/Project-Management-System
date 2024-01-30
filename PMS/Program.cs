@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PMS.Data;
 using PMS.Models;
 using System;
+using MySql.Data;
 
 namespace PMS
 {
@@ -17,7 +18,10 @@ namespace PMS
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            {
+                options.UseSqlServer(connectionString);
+            });
+                //options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             /*
@@ -72,7 +76,7 @@ namespace PMS
             */
 
             // intialize main roles and admin user
-
+/*
             using (var scope = app.Services.CreateScope())
             {
                 //inialize roles
@@ -96,7 +100,7 @@ namespace PMS
 
 
             }
-
+*/
             app.Run();
 /*          return System.Threading.Tasks.Task.CompletedTask;*/
         }

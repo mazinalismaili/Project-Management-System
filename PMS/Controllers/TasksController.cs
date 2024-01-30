@@ -43,7 +43,10 @@ namespace PMS.Controllers
                 .Include(t => t.Status)
                 .Include(t => t.Priority)
                 .Include (t => t.Comments)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);  
+
+            //Sort comments by date -- can replace OrderBy() by OrderByDescending() 
+            task.Comments = task.Comments.OrderBy(c => c.CreatedAt).ToList();
             if (task == null)
             {
                 return NotFound();
@@ -105,18 +108,7 @@ namespace PMS.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        /*public async Task<IActionResult> AddComment([Bind("Id,comment,TaskId,EmployeeId")] PMS.Models.Comment comment)//[Bind("Id,comment,TaskId,EmployeeId")] Comment comment)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(comment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View();
-        }*/
-
-        public async Task<IActionResult> AddComment(IFormCollection form)
+       public async Task<IActionResult> AddComment(IFormCollection form)
         {
             Comment comment = new Comment
             {
@@ -128,7 +120,7 @@ namespace PMS.Controllers
             };
             _context.Add(comment);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", new { id = form["TaskId"] });
         }
 
 /*        public async Task<IActionResult> CreateComment(string TaskId, string EmployeeId, Comment comment)
